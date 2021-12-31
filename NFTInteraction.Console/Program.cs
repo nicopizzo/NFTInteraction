@@ -29,15 +29,18 @@ var serviceProvider = new ServiceCollection()
 var nftService = serviceProvider.GetRequiredService<NFTService>();
 
 //await PrivateMint(nftService, wallet);
-await SetupPublic(nftService, wallet, "0xcedC3BEbB270cB4178770f8D0195218E0a087BC1");
+//await SetupPublic(nftService, wallet, "0xcedC3BEbB270cB4178770f8D0195218E0a087BC1");
 
+//await GiveNFT(nftService, wallet, "0x8596e499C4ba22661d93a680a9B2a1C4fF4c3f98");
+
+await CompleteMinting(nftService, wallet);
 
 Console.ReadLine();
 
 
 
 
-async Task PrivateMint(NFTService nftService, Wallet wallet, string toAddress = null)
+async Task PrivateMint(NFTService nftService, Wallet wallet)
 {
     var isPresaleLive = await nftService.PrivateSaleLiveQueryAsync();
     if (!isPresaleLive)
@@ -51,13 +54,12 @@ async Task PrivateMint(NFTService nftService, Wallet wallet, string toAddress = 
     var mintCost = await nftService.PrivateSaleCostQueryAsync();
     var mintResult = await nftService.PrivateSaleMintRequestAndWaitForReceiptAsync(new NFTInteraction.ContractDefinition.PrivateSaleMintFunction()
     {
-        To = string.IsNullOrEmpty(toAddress) ? wallet.GetAccount(0).Address : toAddress,
         AmountToSend = mintCost,
         MintCount = 1
     });
 }
 
-async Task SetupPublic(NFTService nftService, Wallet wallet, string toAddress = null)
+async Task SetupPublic(NFTService nftService, Wallet wallet)
 {
     var isLive = await nftService.IsLiveQueryAsync();
     if (!isLive)
@@ -68,8 +70,26 @@ async Task SetupPublic(NFTService nftService, Wallet wallet, string toAddress = 
     var mintCost = await nftService.MintCostQueryAsync();
     var mintResult = await nftService.MintRequestAndWaitForReceiptAsync(new NFTInteraction.ContractDefinition.MintFunction()
     {
-        To = string.IsNullOrEmpty(toAddress) ? wallet.GetAccount(0).Address : toAddress,
         AmountToSend = mintCost,
         MintCount = 1
+    });
+}
+
+async Task GiveNFT(NFTService nftService, Wallet wallet, string toAddress)
+{
+    var result = await nftService.GiveRequestAndWaitForReceiptAsync(new NFTInteraction.ContractDefinition.GiveFunction()
+    {
+        To = toAddress,
+        MintCount = 1
+    });
+}
+
+async Task CompleteMinting(NFTService nftService, Wallet wallet)
+{
+    var url = "https://gateway.pinata.cloud/ipfs/QmYu9Ct4SS34a8LH6nKpEgZYnJJjcR4gzPwfsbi86WjcAw/";
+
+    var result = await nftService.SetBaseUriRequestAndWaitForReceiptAsync(new NFTInteraction.ContractDefinition.SetBaseUriFunction()
+    {
+        Uri = url
     });
 }

@@ -280,19 +280,17 @@ namespace NFTInteraction
              return _ContractHandler.SendRequestAndWaitForReceiptAsync(mintFunction, cancellationToken);
         }
 
-        public Task<string> MintRequestAsync(string to, BigInteger mintCount)
+        public Task<string> MintRequestAsync(BigInteger mintCount)
         {
             var mintFunction = new MintFunction();
-                mintFunction.To = to;
                 mintFunction.MintCount = mintCount;
             
              return _ContractHandler.SendRequestAsync(mintFunction);
         }
 
-        public Task<TransactionReceipt> MintRequestAndWaitForReceiptAsync(string to, BigInteger mintCount, CancellationTokenSource cancellationToken = null)
+        public Task<TransactionReceipt> MintRequestAndWaitForReceiptAsync(BigInteger mintCount, CancellationTokenSource cancellationToken = null)
         {
             var mintFunction = new MintFunction();
-                mintFunction.To = to;
                 mintFunction.MintCount = mintCount;
             
              return _ContractHandler.SendRequestAndWaitForReceiptAsync(mintFunction, cancellationToken);
@@ -399,19 +397,17 @@ namespace NFTInteraction
              return _ContractHandler.SendRequestAndWaitForReceiptAsync(privateSaleMintFunction, cancellationToken);
         }
 
-        public Task<string> PrivateSaleMintRequestAsync(string to, BigInteger mintCount)
+        public Task<string> PrivateSaleMintRequestAsync(BigInteger mintCount)
         {
             var privateSaleMintFunction = new PrivateSaleMintFunction();
-                privateSaleMintFunction.To = to;
                 privateSaleMintFunction.MintCount = mintCount;
             
              return _ContractHandler.SendRequestAsync(privateSaleMintFunction);
         }
 
-        public Task<TransactionReceipt> PrivateSaleMintRequestAndWaitForReceiptAsync(string to, BigInteger mintCount, CancellationTokenSource cancellationToken = null)
+        public Task<TransactionReceipt> PrivateSaleMintRequestAndWaitForReceiptAsync(BigInteger mintCount, CancellationTokenSource cancellationToken = null)
         {
             var privateSaleMintFunction = new PrivateSaleMintFunction();
-                privateSaleMintFunction.To = to;
                 privateSaleMintFunction.MintCount = mintCount;
             
              return _ContractHandler.SendRequestAndWaitForReceiptAsync(privateSaleMintFunction, cancellationToken);

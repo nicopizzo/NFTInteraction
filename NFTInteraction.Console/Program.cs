@@ -29,47 +29,9 @@ var serviceProvider = new ServiceCollection()
 var nftService = serviceProvider.GetRequiredService<NFTService>();
 
 //await PrivateMint(nftService, wallet);
-await SetupPublic(nftService, wallet, "0xcedC3BEbB270cB4178770f8D0195218E0a087BC1");
+//await SetupPublic(nftService, wallet);
+//await SetPublicUrl(nftService, "ipfs://QmSUhLdcY6ZQvVaWwRX6esaScS5HkBiVeftHfRkkZnPJwy/");
+//await SetPublicUrl(nftService, "https://gateway.pinata.cloud/ipfs/QmSUhLdcY6ZQvVaWwRX6esaScS5HkBiVeftHfRkkZnPJwy/");
 
 
 Console.ReadLine();
-
-
-
-
-async Task PrivateMint(NFTService nftService, Wallet wallet, string toAddress = null)
-{
-    var isPresaleLive = await nftService.PrivateSaleLiveQueryAsync();
-    if (!isPresaleLive)
-    {
-        var setLive = await nftService.GoPresaleLiveRequestAndWaitForReceiptAsync();
-        var whiteLIst = await nftService.AddToPrivateSaleWhitelistRequestAsync(new NFTInteraction.ContractDefinition.AddToPrivateSaleWhitelistFunction()
-        {
-            PrivateSaleAddresses = new List<string> { wallet.GetAccount(0).Address }
-        });
-    }
-    var mintCost = await nftService.PrivateSaleCostQueryAsync();
-    var mintResult = await nftService.PrivateSaleMintRequestAndWaitForReceiptAsync(new NFTInteraction.ContractDefinition.PrivateSaleMintFunction()
-    {
-        To = string.IsNullOrEmpty(toAddress) ? wallet.GetAccount(0).Address : toAddress,
-        AmountToSend = mintCost,
-        MintCount = 1
-    });
-}
-
-async Task SetupPublic(NFTService nftService, Wallet wallet, string toAddress = null)
-{
-    var isLive = await nftService.IsLiveQueryAsync();
-    if (!isLive)
-    {
-        var setLive = await nftService.GoLiveRequestAndWaitForReceiptAsync();
-    }
-    
-    var mintCost = await nftService.MintCostQueryAsync();
-    var mintResult = await nftService.MintRequestAndWaitForReceiptAsync(new NFTInteraction.ContractDefinition.MintFunction()
-    {
-        To = string.IsNullOrEmpty(toAddress) ? wallet.GetAccount(0).Address : toAddress,
-        AmountToSend = mintCost,
-        MintCount = 1
-    });
-}

@@ -181,7 +181,9 @@ namespace NFTInteraction.ContractDefinition
     [Function("mint")]
     public class MintFunctionBase : FunctionMessage
     {
-        [Parameter("uint256", "mintCount")]
+        [Parameter("address", "to", 1)]
+        public virtual string To { get; set; }
+        [Parameter("uint256", "mintCount", 2)]
         public virtual BigInteger MintCount { get; set; }
     }
 
@@ -255,7 +257,9 @@ namespace NFTInteraction.ContractDefinition
     [Function("privateSaleMint")]
     public class PrivateSaleMintFunctionBase : FunctionMessage
     {
-        [Parameter("uint256", "mintCount")]
+        [Parameter("address", "to", 1)]
+        public virtual string To { get; set; }
+        [Parameter("uint256", "mintCount", 2)]
         public virtual BigInteger MintCount { get; set; }
     }
 

@@ -5,6 +5,8 @@ using Nethereum.RPC.Accounts;
 using Nethereum.Web3;
 using NFTInteraction;
 using Nethereum.HdWallet;
+using Nethereum.Web3.Accounts;
+using NFTInteraction.Console;
 
 var config = new ConfigurationBuilder()
     .AddJsonFile("appsettings.json")
@@ -16,22 +18,22 @@ var chainId = config.GetSection("Web3:ChainId").Value;
 var contractAddress = config.GetSection("Web3:ContractAddress").Value;
 var projectId = config.GetSection("ProjectId").Value;
 var mnemonic = config.GetSection("Mnemonic").Value;
+var privateKey = config.GetSection("PrivateKey").Value;
 
 var wallet = new Wallet(mnemonic, "");
-var accounts = wallet.GetAddresses();
+var account = new Account(privateKey, int.Parse(chainId));
 
 var serviceProvider = new ServiceCollection()
-    .AddSingleton<IAccount>(f => wallet.GetAccount(0, int.Parse(chainId)))
-    .AddSingleton<IWeb3>(f => new Web3(f.GetRequiredService<IAccount>(), $"https://{network}.infura.io/v3/{projectId}"))
+    .AddSingleton<IWeb3>(f => new Web3(account, $"https://{network}.infura.io/v3/{projectId}"))
     .AddSingleton<NFTService>(f => new NFTService(f.GetRequiredService<IWeb3>(), contractAddress))
     .BuildServiceProvider();
 
 var nftService = serviceProvider.GetRequiredService<NFTService>();
 
-//await PrivateMint(nftService, wallet);
-//await SetupPublic(nftService, wallet);
-//await SetPublicUrl(nftService, "ipfs://QmSUhLdcY6ZQvVaWwRX6esaScS5HkBiVeftHfRkkZnPJwy/");
-//await SetPublicUrl(nftService, "https://gateway.pinata.cloud/ipfs/QmSUhLdcY6ZQvVaWwRX6esaScS5HkBiVeftHfRkkZnPJwy/");
-
+var interactions = new Interactions(nftService);
+//await interactions.PrivateMint(wallet);
+//await interactions.StartPublicSale();
+//await interactions.SetPublicUrl("ipfs://QmSUhLdcY6ZQvVaWwRX6esaScS5HkBiVeftHfRkkZnPJwy/");
+await interactions.Give(account.Address, 5);
 
 Console.ReadLine();

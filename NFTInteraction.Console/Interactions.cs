@@ -75,5 +75,14 @@ namespace NFTInteraction.Console
                 Uri = url
             });
         }
+
+        public async Task Give(string toAddress, int count)
+        {
+            var result = await _NFTService.GiveRequestAndWaitForReceiptAsync(new ContractDefinition.GiveFunction()
+            {
+                To = toAddress,
+                MintCount = count
+            });
+        }
     }
 }

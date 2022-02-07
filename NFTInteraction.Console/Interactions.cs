@@ -31,7 +31,7 @@ namespace NFTInteraction.Console
 
         public async Task StartPublicSale()
         {
-            var setLive = await _NFTService.GoPresaleLiveRequestAndWaitForReceiptAsync();
+            var setLive = await _NFTService.GoLiveRequestAndWaitForReceiptAsync();
         }
 
         public async Task PrivateMint(Wallet wallet, string toAddress = null)

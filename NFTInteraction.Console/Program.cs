@@ -32,8 +32,9 @@ var nftService = serviceProvider.GetRequiredService<NFTService>();
 
 var interactions = new Interactions(nftService);
 //await interactions.PrivateMint(wallet);
+await interactions.StartPrivateSale();
 //await interactions.StartPublicSale();
 //await interactions.SetPublicUrl("ipfs://QmSUhLdcY6ZQvVaWwRX6esaScS5HkBiVeftHfRkkZnPJwy/");
-await interactions.Give(account.Address, 5);
+//await interactions.Give(account.Address, 5);
 
 Console.ReadLine();

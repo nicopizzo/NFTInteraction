@@ -31,8 +31,8 @@ var serviceProvider = new ServiceCollection()
 var nftService = serviceProvider.GetRequiredService<NFTService>();
 
 var interactions = new Interactions(nftService);
-//await interactions.PrivateMint(wallet);
-await interactions.StartPrivateSale();
+//await interactions.StartPrivateSale();
+await interactions.CreatePrivateSaleWhitelist(new List<string> { "0xcedC3BEbB270cB4178770f8D0195218E0a087BC1", "0xEaDaAE05570a12013E4a214F9f79Dc1E3ACbf994" });
 //await interactions.StartPublicSale();
 //await interactions.SetPublicUrl("ipfs://QmSUhLdcY6ZQvVaWwRX6esaScS5HkBiVeftHfRkkZnPJwy/");
 //await interactions.Give(account.Address, 5);
